@@ -1,7 +1,13 @@
 import SearchForm from "@/components/SearchForm";
 import React from "react";
 
-const Home = () => {
+const Home = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ query?: string }>;
+}) => {
+  const query = (await searchParams).query;
+  const params = { search: query || null };
   return (
     <>
       <section className="pink_container">
@@ -13,7 +19,14 @@ const Home = () => {
           Submit Ideas, Vote on Pitches, and Get Noticed in Virtual
           Competitions.
         </p>
-        <SearchForm />
+        <SearchForm query={query} />
+      </section>
+      <section className="section_container">
+        <p className="text-30-semibold">
+          {query ? `Search results for "${query}"` : "All Startups"}
+        </p>
+
+        <ul className="mt-7 card_grid"></ul>
       </section>
     </>
   );
