@@ -1,3 +1,4 @@
+import SearchForm from "@/components/SearchForm";
 import React from "react";
 
 const Home = () => {
@@ -12,6 +13,7 @@ const Home = () => {
           Submit Ideas, Vote on Pitches, and Get Noticed in Virtual
           Competitions.
         </p>
+        <SearchForm />
       </section>
     </>
   );
