@@ -1,10 +1,11 @@
 import { EyeIcon } from "lucide-react";
-import { Author } from "next/dist/lib/metadata/types/metadata-types";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
 import { formatDate } from "@/lib/utils";
+import { Author, Startup } from "@/sanity/types";
 
 export type StartupTypeCard = Omit<Startup, "author"> & { author?: Author };
 const StartupCard = ({ post }: { post: StartupTypeCard }) => {
