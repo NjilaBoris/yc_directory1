@@ -1,4 +1,5 @@
 import SearchForm from "@/components/SearchForm";
+import StartupCard from "@/components/StartupCard";
 import React from "react";
 
 const Home = async ({
@@ -26,7 +27,15 @@ const Home = async ({
           {query ? `Search results for "${query}"` : "All Startups"}
         </p>
 
-        <ul className="mt-7 card_grid"></ul>
+        {/* <ul className="mt-7 card_grid">
+          {posts?.length > 0 ? (
+            posts.map((post: StartupTypeCard) => (
+              <StartupCard key={post?._id} post={post} />
+            ))
+          ) : (
+            <p className="no-results">No startups found</p>
+          )}
+        </ul> */}
       </section>
     </>
   );
