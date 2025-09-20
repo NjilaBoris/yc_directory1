@@ -1,24 +1,85 @@
 "use client";
 import React, { useActionState, useState } from "react";
+
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { formSchema } from "@/lib/validation";
+import { toast } from "sonner";
+import { z } from "zod";
+import { createPitch } from "@/lib/actions";
 
 const StartupForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [pitch, setPitch] = useState("");
   const router = useRouter();
 
-  const handleFormSubmit = () => {};
+  const handleFormSubmit = async (prevState: any, formData: FormData) => {
+    try {
+      const formValues = {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        category: formData.get("category") as string,
+        link: formData.get("link") as string,
+        pitch,
+      };
+      await formSchema.parseAsync(formValues);
+
+      const result = await createPitch(prevState, formData, pitch);
+
+      if (result.status == "SUCCESS") {
+        toast.success("Success", {
+          description: "Your startup pitch has been created successfully",
+          style: {
+            backgroundColor: "#24a148",
+            color: "#fff",
+            border: "1px solid #24a148",
+          },
+        });
+
+        router.push(`/startup/${result._id}`);
+      }
+
+      return result;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErorrs = error.flatten().fieldErrors;
+        setErrors(fieldErorrs as unknown as Record<string, string>);
+        toast.error("Error", {
+          description: "Please check your inputs and try again",
+          style: {
+            backgroundColor: "#f8d7da",
+            color: "#721c24",
+            border: "1px solid #f5c6cb",
+          },
+        });
+        return { ...prevState, error: "Validation failed", status: "ERROR" };
+      }
+      toast.error("Error", {
+        description: "Please check your inputs and try again",
+        style: {
+          backgroundColor: "#f8d7da",
+          color: "#721c24",
+          border: "1px solid #f5c6cb",
+        },
+      });
+
+      return {
+        ...prevState,
+        error: "An unexpected error has occurred",
+        status: "ERROR",
+      };
+    }
+  };
   const [state, formAction, isPending] = useActionState(handleFormSubmit, {
     error: "",
     status: "INITIAL",
   });
   return (
-    <form action={() => {}} className="startup-form">
+    <form action={formAction} className="startup-form">
       <div>
         <label htmlFor="title" className="startup-form_label">
           Title
