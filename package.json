@@ -14,7 +14,8 @@
   "overrides": {
     "react": "$react",
     "react-dom": "$react-dom",
-    "next": "$next"
+    "next": "$next",
+    "@sanity/client": "6.29.1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
