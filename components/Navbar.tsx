@@ -6,6 +6,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = async () => {
   const session = await auth();
+  const initials = session?.user?.name
+    .split(" ")
+    .map((word: string) => word[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   return (
     <header className="px-5 py-3 bg-white shadow-sm font-work-sans">
@@ -38,13 +44,15 @@ const Navbar = async () => {
                 </button>
               </form>
 
-              <Link href={`/user/${session?.user?.id}`}>
+              <Link href={`/user/${session?.id}`}>
                 <Avatar className="size-10">
                   <AvatarImage
                     src={session?.user?.image || ""}
                     alt={session?.user?.name || ""}
                   />
-                  <AvatarFallback>AV</AvatarFallback>
+                  <AvatarFallback className="bg-primary rounded-full text-white">
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
               </Link>
             </>
